@@ -34,20 +34,37 @@ public class 다트게임 {
 
         */
 
-
         int answer = 0;
-        int scCount = 1;
         int score[] = new int[3];
         int numSave = 0;
-        String dartResult = "1D2S3T*";
+        String dartResult = "1D#2S*3S";
 
 
         String[] splitNum = dartResult.split("\\D+");
         String[] splitString = dartResult.split("[^A-Z]");
+        String[] splitCs = dartResult.split("[^*#A-Z]");
 
         List<String> numList = Arrays.asList(splitNum);
         List<String> stringList = new ArrayList<>();
         List<String> scList = new ArrayList<>();
+
+
+        for(int i=0; i<splitCs.length; i++){
+
+            if(!splitCs[i].equals("")) {
+
+                if (splitCs[i].contains("*")) {
+                    scList.add("*");
+                }
+                else if(splitCs[i].contains("#")){
+                    scList.add("#");
+                }
+                else {
+                    scList.add("");
+                }
+            }
+        }
+
 
         for(int i=0; i<splitString.length; i++){
             if(!splitString[i].equals("")){
@@ -55,25 +72,9 @@ public class 다트게임 {
             }
         }
 
-        for(int i=0; i<dartResult.length(); i++){
-            ++scCount;
-            if(scCount%3 == 0){
-                if(dartResult.substring(i, i + 1).equals("*") || dartResult.substring(i, i + 1).equals("#")){
-                    scList.add(dartResult.substring(i, i + 1));
-                }else{
-                    scList.add("");
-                }
-                scCount = 0;
-            }
-        }
-
-        for(int i=scList.size(); i<numList.size(); i++){
-            scList.add("");
-        }
-
-        System.out.println(numList);
-        System.out.println(stringList);
-        System.out.println(scList);
+        //System.out.println(numList);
+        //System.out.println(stringList);
+        //System.out.println(scList);
 
 
         for(int num =0; num<numList.size(); num++){
@@ -119,78 +120,5 @@ public class 다트게임 {
         }
 
         System.out.println("답 : " + answer);
-
-
-
-
-/*        for (int i = 0; i < dartResult.length(); i++) {
-
-            scoreCount++;
-
-            String ifNum = dartResult.substring(i, i + 1).replaceAll("[^0-9]", "");
-            String ifString = dartResult.substring(i, i + 1).replaceAll("[^A-Z]", "");
-            String ifSc = dartResult.substring(i, i + 1).replaceAll("[^*#]", "");
-
-
-            if (scoreCount % 2 == 0) {
-                if(ifSc.equals("")) {
-                    scoreCount = 0;
-                    score[count] = numSave;
-                }
-            }
-
-
-                if(ifNum.length() != 0){
-                    scoreCount = 0;
-                    ++count;
-                    numSave = Integer.parseInt(ifNum);
-                    continue;
-                }
-
-
-                else if (ifString.length() != 0) {
-
-                    switch (ifString) {
-                        case "S":
-                            break;
-                        case "D":
-                            numSave = numSave * numSave;
-                            break;
-                        case "T":
-                            numSave = numSave * numSave * numSave;
-                            break;
-                    }
-                }
-
-                        else if (ifSc.equals("*")) {
-
-                            score[count] = numSave * 2;
-
-                            if (i == 2) {
-                                continue;
-                            } else {
-                                int beforeScore = count - 1;
-                                score[beforeScore] = score[beforeScore] * 2;
-
-                            }
-                            continue;
-                        }
-
-                        else if(ifSc.equals("#")){
-                            score[count] = numSave * (-1);
-                            continue;
-                        }
-
-
-                if(dartResult.length() == i+1){
-                    score[count] = numSave;
-                }
-        }
-
-        for(int i=0; i<score.length; i++){
-            answer += score[i];
-        }*/
-
-            //System.out.println("답 : " + answer);
     }
 }
