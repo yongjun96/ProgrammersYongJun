@@ -1,6 +1,9 @@
 package Level2;
 
-import sun.rmi.runtime.Log;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class 다트게임 {
 
@@ -33,20 +36,98 @@ public class 다트게임 {
 
 
         int answer = 0;
-        int count = -1;
-        int scoreCount = 0;
+        int scCount = 1;
         int score[] = new int[3];
         int numSave = 0;
-        String dartResult = "1D2S#10S";
+        String dartResult = "1D2S3T*";
 
 
         String[] splitNum = dartResult.split("\\D+");
+        String[] splitString = dartResult.split("[^A-Z]");
 
-        for (int i = 0; i < dartResult.length(); i++) {
+        List<String> numList = Arrays.asList(splitNum);
+        List<String> stringList = new ArrayList<>();
+        List<String> scList = new ArrayList<>();
+
+        for(int i=0; i<splitString.length; i++){
+            if(!splitString[i].equals("")){
+                stringList.add(splitString[i]);
+            }
+        }
+
+        for(int i=0; i<dartResult.length(); i++){
+            ++scCount;
+            if(scCount%3 == 0){
+                if(dartResult.substring(i, i + 1).equals("*") || dartResult.substring(i, i + 1).equals("#")){
+                    scList.add(dartResult.substring(i, i + 1));
+                }else{
+                    scList.add("");
+                }
+                scCount = 0;
+            }
+        }
+
+        for(int i=scList.size(); i<numList.size(); i++){
+            scList.add("");
+        }
+
+        System.out.println(numList);
+        System.out.println(stringList);
+        System.out.println(scList);
+
+
+        for(int num =0; num<numList.size(); num++){
+
+            int snum = Integer.parseInt(numList.get(num));
+
+            switch (stringList.get(num)) {
+                case "S":
+                    numSave = snum;
+                    break;
+                case "D":
+                    numSave = snum * snum;
+                    break;
+                case "T":
+                    numSave = snum * snum * snum;
+                    break;
+            }
+            if(!scList.get(num).equals("")){
+
+                    switch (scList.get(num)){
+
+                        case "*":
+                            if(num == 0){
+                                score[num] = numSave * 2;
+                            }else{
+                                int beforeScore = num - 1;
+                                score[num] = numSave * 2;
+                                score[beforeScore] = score[beforeScore] * 2;
+                            }
+                            break;
+
+                        case "#":
+                            score[num] = numSave * (-1);
+                            break;
+                    }
+            }else{
+                score[num] = numSave;
+            }
+        }
+
+        for(int i=0; i<score.length; i++){
+            answer += score[i];
+        }
+
+        System.out.println("답 : " + answer);
+
+
+
+
+/*        for (int i = 0; i < dartResult.length(); i++) {
 
             scoreCount++;
 
-            String ifNum = splitNum[0];
+            String ifNum = dartResult.substring(i, i + 1).replaceAll("[^0-9]", "");
             String ifString = dartResult.substring(i, i + 1).replaceAll("[^A-Z]", "");
             String ifSc = dartResult.substring(i, i + 1).replaceAll("[^*#]", "");
 
@@ -108,12 +189,8 @@ public class 다트게임 {
 
         for(int i=0; i<score.length; i++){
             answer += score[i];
-        }
+        }*/
 
-            System.out.println("답 : " + answer);
-
-
-
-
+            //System.out.println("답 : " + answer);
     }
 }
